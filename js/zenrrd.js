@@ -43,13 +43,14 @@ $(document).ready(function(){
             }
             else {
 		localStorage.setItem( 'dateend', dateText );
-		endDateTextBox.val(dateText);
+		console.log(localStorage.getItem( 'dateend'));
             }
 	    localStorage.setItem( 'datestart', dateText );
 	},
 	onSelect: function (selectedDateTime){
             var start = $(this).datetimepicker('getDate');
             $('#datepicket_end').datetimepicker('option', 'minDate', new Date(start.getTime()));
+	    localStorage.setItem( 'datestart', dateText );
 	}
     }).datepicker('setDate', localStorage.getItem( 'datestart'));
 
@@ -77,7 +78,7 @@ $(document).ready(function(){
 	}
     }).datepicker('setDate', localStorage.getItem( 'dateend'));
 
-    var end = localStorage.removeItem( 'dateend');
+    var end = localStorage.getItem( 'dateend');
     if (typeof end == 'undefined') {
 	date = new Date();
 	$('#datepicker_end').datetimepicker('setDate', (new Date()) );
