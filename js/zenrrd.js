@@ -42,8 +42,8 @@ $(document).ready(function(){
 		}
             }
             else {
+		endDateTextBox.val(dateText);
 		localStorage.setItem( 'dateend', dateText );
-		console.log(localStorage.getItem( 'dateend'));
             }
 	    localStorage.setItem( 'datestart', dateText );
 	},
@@ -67,8 +67,8 @@ $(document).ready(function(){
 		localStorage.setItem( 'dateend', dateText );
             }
             else {
-		localStorage.setItem( 'datestart', dateText );
 		startDateTextBox.val(dateText);
+		localStorage.setItem( 'datestart', dateText );
             }
 	    localStorage.setItem( 'dateend', dateText );
 	},
