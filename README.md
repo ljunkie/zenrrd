@@ -35,11 +35,10 @@
      (AllowOverride All is needed to be set in the apache conf)
 
 2) copy <webroot>/zenrrd.config.dist to <webroot>/zenrrd.config
-   * You must set 3 variables in the file before continuing. More details are in the config
-   
-    renderserver_url=
-    zenoss_perf_dir=
-    zenoss_users=
+   ** You must set 3 variables in the file before continuing. More details are in the config
+   -   renderserver_url=
+   -   zenoss_perf_dir=
+   -   zenoss_users=
    
 3) execute <webroot>/bin/zenoss_rrd_int_csv.sh
    - you might needs to the change the first line in <webroot>/bin/get_interface_csv.py  (depending on your zenoss install dir)
