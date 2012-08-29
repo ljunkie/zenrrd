@@ -43,8 +43,7 @@
    
 3) execute <webroot>/bin/zenoss_rrd_int_csv.sh
    - you might needs to the change the first line in <webroot>/bin/get_interface_csv.py  (depending on your zenoss install dir)
-   
-     I.E. #!/opt/zenoss/bin/python  
+  I.E. #!/opt/zenoss/bin/python  
 
    - verify it created the file "<webroot>/bin/interfaces.csv"
       INFO: All this does is execute a python script as the zenoss user (to access the zenoss device database)
