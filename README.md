@@ -22,7 +22,6 @@
  * sudo access as root (reason: step #3, bash wrapper runs sudo -i -h zenoss) 
  * PHP5 (older version will probably work)
  * Perl
- ** Perl Modules
   - Time::ParseDate
   - Compress::Zlib
   - MIME::Base64::URLSafe
@@ -52,11 +51,11 @@
     debug: you can run '<webroot>/bin/zenoss_rrd_int_csv.sh debug'  to see the output
 
 4) ADD to crontab: (once you have verified step 3 created a <webroot>/bin/interfaces.csv)
-    # this will update your interface csv file every hour on the 30
+    - this will update your interface csv file every hour on the 30
     30 * * * * root <webroot>/bin/zenoss_rrd_int_csv.sh
 
 5) [optional] To allow graph access without the need to login to zenoss first..
-    Visit: http://<your_zenoss_url>/zport/RenderServer/manage_access
+     - Visit: http://<your_zenoss_url>/zport/RenderServer/manage_access
      - Allow anonymouse to 'View' -- it's close to the bottom of the page
 
 6) Go to your website (wherever you put your <webroot>)
