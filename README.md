@@ -35,10 +35,10 @@
      (AllowOverride All is needed to be set in the apache conf)
 
 2) copy <webroot>/zenrrd.config.dist to <webroot>/zenrrd.config
-   - You must set 3 variables in the file before continuing. More details are in the config
-      renderserver_url=
-      zenoss_perf_dir=
-      zenoss_users=
+   * You must set 3 variables in the file before continuing. More details are in the config
+   -   renderserver_url=
+   -   zenoss_perf_dir=
+   -   zenoss_users=
    
 3) execute <webroot>/bin/zenoss_rrd_int_csv.sh
    - you might needs to the change the first line in <webroot>/bin/get_interface_csv.py  (depending on your zenoss install dir)
@@ -48,10 +48,11 @@
       INFO: All this does is execute a python script as the zenoss user (to access the zenoss device database)
             and creates the <webroot>/bin/interfaces.csv file.
   
-    debug: you can run '<webroot>/bin/zenoss_rrd_int_csv.sh debug'  to see the output
+   * debug: you can run '<webroot>/bin/zenoss_rrd_int_csv.sh debug'  to see the output
 
 4) ADD to crontab: (once you have verified step 3 created a <webroot>/bin/interfaces.csv)
-    - this will update your interface csv file every hour on the 30
+    - this will update your interface csv
+    
     30 * * * * root <webroot>/bin/zenoss_rrd_int_csv.sh
 
 5) [optional] To allow graph access without the need to login to zenoss first..
