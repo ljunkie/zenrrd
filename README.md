@@ -35,6 +35,7 @@
      (AllowOverride All is needed to be set in the apache conf)
 
 2) copy <webroot>/zenrrd.config.dist to <webroot>/zenrrd.config
+   
    ** You must set 3 variables in the file before continuing. More details are in the config
    -   renderserver_url=
    -   zenoss_perf_dir=
