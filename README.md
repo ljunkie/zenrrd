@@ -43,7 +43,8 @@
    
 3) execute <webroot>/bin/zenoss_rrd_int_csv.sh
    - you might needs to the change the first line in <webroot>/bin/get_interface_csv.py  (depending on your zenoss install dir)
-  I.E. #!/opt/zenoss/bin/python  
+  
+   I.E. #!/opt/zenoss/bin/python  
 
    - verify it created the file "<webroot>/bin/interfaces.csv"
       INFO: All this does is execute a python script as the zenoss user (to access the zenoss device database)
@@ -52,15 +53,16 @@
    * debug: you can run '<webroot>/bin/zenoss_rrd_int_csv.sh debug'  to see the output
 
 4) ADD to crontab: (once you have verified step 3 created a <webroot>/bin/interfaces.csv)
-    - this will update your interface csv
+    * this will update your interface csv
     
     30 * * * * root <webroot>/bin/zenoss_rrd_int_csv.sh
 
 5) [optional] To allow graph access without the need to login to zenoss first..
-     - Visit: http://<your_zenoss_url>/zport/RenderServer/manage_access
-     - Allow anonymouse to 'View' -- it's close to the bottom of the page
+     * Visit: http://<your_zenoss_url>/zport/RenderServer/manage_access
+     * Allow anonymouse to 'View' -- it's close to the bottom of the page
 
 6) Go to your website (wherever you put your <webroot>)
+
      ...and explorer
 
  
