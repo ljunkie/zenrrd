@@ -30,7 +30,7 @@
 
 ##Installing: 
 
-1) unpack files into a <webroot> of your choice (apache has been tested)
+1) unpack files into a [webroot] of your choice (apache has been tested)
    * <webroot>/cgi-bin/.htaccess file is included to add cgi-support 
      (AllowOverride All is needed to be set in the apache conf)
 
@@ -63,6 +63,6 @@
 
 6) Go to your website (wherever you put your <webroot>)
 
-     ...and explorer
+ ...and explorer
 
  
