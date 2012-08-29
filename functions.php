@@ -3,8 +3,8 @@
 
 if (!file_exists($filename)) {
     echo "The file <b>$filename</b> does not exist</b>";
-    $file = file_get_contents('INSTALL.readme');
-    print "<p>Please read the INSTALL.readme file<p>";
+    $file = file_get_contents('README');
+    print "<p>Please read the file README<p>";
     print "<pre>$file</pre>";
     exit;
  }
