@@ -1,6 +1,16 @@
-Custom graph front-end for ZENOSS - Cacti Like Graphs including date ranges and zoom
+#Custom graph front-end for ZENOSS - Cacti Like Graphs including date ranges and zoom
 
-![Alt text](/screenshots/zenrrd_graph1.png "Inital Graph")
+## Initial Graph for: Device: testrouter.title   Interface: TenGigabitEthernet1/4   Desc: Interface Description Test
+[![Graph RRD](https://raw.github.com/ljunkie/zenrrd/master/screenshots/zenrrd_graph1.png)]
+
+## Date Time Picker
+[![Graph RRD](https://raw.github.com/ljunkie/zenrrd/master/screenshots/zenrrd_graph_datetimepicker.png)]
+
+## Zoom a graph (like cacti)
+[![Graph RRD](https://raw.github.com/ljunkie/zenrrd/master/screenshots/zenrrd_graph_zoom1.png)]
+
+## End Result of Zoom
+[![Graph RRD](https://raw.github.com/ljunkie/zenrrd/master/screenshots/zenrrd_graph_zoom1.png)]
 
 
 Requirements:
