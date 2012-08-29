@@ -1,0 +1,10 @@
+table td { width: 100px;  text-align: center;}
+.zoom_rrd-vline,.zoom_rrd-hline{background:#FFF url(zenrrd_zoom.gif) top left repeat;font-size:0;position:absolute;}
+.zoom_rrd-vline{height:100%;width:1px!important;}
+.zoom_rrd-hline{height:1px!important;width:100%;}
+.zoom_rrd-vline.right{right:0;}
+.zoom_rrd-hline.bottom{bottom:0;}
+
+
+
+

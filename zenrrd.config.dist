@@ -1,0 +1,22 @@
+#
+# renderserver_url is the location of your zenoss RenderServer
+# Example: http://<your_domain_name>:8080/zport/RenderServer/render?gopts=
+#   
+# You can find this url by view an interface graph (before you zoom) and copy the image URL
+#
+
+renderserver_url=http://<your_zenoss_url:8080>/zport/RenderServer/render?gopts=
+
+
+#
+# zenoss_perf_dir is normally the zenoss base url with /perf/ appended to it
+# Example: /opt/zenoss/perf/
+#
+
+zenoss_perf_dir=/opt/zenoss/perf/
+
+#
+# The users zenoss runs as
+# Example: zenoss
+
+zenoss_user=zenoss

@@ -1,0 +1,97 @@
+body {
+ color: #787878;
+ weight: 500;
+ font-weight: 900;
+ font-size: 14px;
+ font-family:Arial,"Times New Roman",Georgia,Serif;
+}
+
+.zoom_cur {
+  cursor:pointer;
+  cursor:-moz-zoom-in;
+  cursor:-webkit-zoom-in;
+}
+
+table {
+  color: #787878;
+  weight: 500;
+  font-weight: 900;
+  font-size: 14px;
+  font-family:Arial,"Times New Roman",Georgia,Serif;
+  margin-bottom: -8px;
+}
+
+a{
+  color: #787878;
+  font-size: 11px;
+  font-family:Arial,"Times New Roman",Georgia,Serif;
+}
+
+table tr td  {
+  height: 20px;
+  padding: 2px;
+}
+
+#query_box {
+  width: 879px;
+  border: 1px solid #ccc;
+}
+
+#device_name {
+  background: transparent;
+  color: #585858;
+  width: 300px;
+  color: #585858;
+  font-size: 15px;
+  height: 26px;
+  font-weight: 900;
+}
+
+#int_name {
+  background: transparent;
+  width: 409px;
+  color: #585858;
+  font-size: 13px;
+  padding: 2px;
+  height: 26px;
+  font-weight: 900;
+}
+
+input {
+  font-weight: 900;
+  font-size: 14px;
+  color: #585858;
+  weight: 500;
+  padding: 2px;
+  height: 26px;
+  background: transparent;
+  border: 1px solid #ccc;
+}
+
+input[type=button],input[type=submit] {
+  background: #c0c0c0;
+  border: 1px solid #333333;
+}
+
+input[type=button]:hover, input[type=submit]:hover {
+  cursor: pointer;
+  background: silver;
+  opacity: .8;
+  border: 1px solid green;
+}
+
+/* css for timepicker */
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
+.ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+
+.ui-autocomplete {
+ font-size: 13px;
+ color: #585858;
+}
+
+
+
