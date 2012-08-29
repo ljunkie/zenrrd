@@ -1,6 +1,5 @@
 Custom graph front-end for ZENOSS - Cacti Like Graphs including date ranges and zoom
 
- - read the INSTALL.readme
 Requirements:
 
  * ZENOSS 4.2+ (This will probably work with older versions)
