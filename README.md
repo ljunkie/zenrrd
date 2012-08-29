@@ -11,10 +11,10 @@
 ![Graph RRD](https://raw.github.com/ljunkie/zenrrd/master/screenshots/zenrrd_graph_zoom1.png)
 
 #### End Result of Zoom
-![Graph RRD](https://raw.github.com/ljunkie/zenrrd/master/screenshots/zenrrd_graph_zoom1.png)
+![Graph RRD](https://raw.github.com/ljunkie/zenrrd/master/screenshots/zenrrd_graph_zoom2.png)
 
 
-Requirements:
+##Requirements:
 
  * ZENOSS 4.2+ (This will probably work with older versions)
  * Apache with CGI access (other flavors would work, just not tested)
@@ -29,7 +29,7 @@ Requirements:
   - CGI
   - LWP::UserAgent
 
-Installing: 
+##Installing: 
 
 1) unpack files into a <webroot> of your choice (apache has been tested)
    * <webroot>/cgi-bin/.htaccess file is included to add cgi-support 
