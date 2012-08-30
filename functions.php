@@ -134,23 +134,32 @@ function printGraph($device,$int,$dozoom =null) {
 }
 
 function LoadInts() {
-    $handle = fopen("bin/interfaces.csv", "r");
-    while (($data = fgetcsv($handle)) !== FALSE) {
-	$device = $data[0];
-	$int = $data[1];
-	$desc = $data[2];
-	if (!$desc) { $desc=$int; }
-	$ints[$device][$int]['name'] = $int;
-	$ints[$device][$int]['desc'] = $desc;
-	$ints[$device][$int]['operStatus'] = $data[3];
-	if   (!$data[4]) { $ints[$device]['title'] = strtolower($data[0]);} 
-	else {$ints[$device]['title'] = strtolower($data[4]); }
+    $filename = 'bin/interfaces.csv';
+    if (!file_exists($filename)) {
+	echo "The file <b>$filename</b> does not exist</b>";
+	$file = file_get_contents('README');
+	print "<p>Please read the file README<p>";
+	print "<pre>$file</pre>";
+	exit;
+    }    else {
+	$handle = fopen($filename, "r");
+	while (($data = fgetcsv($handle)) !== FALSE) {
+	    $device = $data[0];
+	    $int = $data[1];
+	    $desc = $data[2];
+	    if (!$desc) { $desc=$int; }
+	    $ints[$device][$int]['name'] = $int;
+	    $ints[$device][$int]['desc'] = $desc;
+	    $ints[$device][$int]['operStatus'] = $data[3];
+	    if   (!$data[4]) { $ints[$device]['title'] = strtolower($data[0]);} 
+	    else {$ints[$device]['title'] = strtolower($data[4]); }
+	}
+	fclose($handle);
+	// Sort the Array by Device TITLE, not key (key is a mix of IP or FQDN)
+	// Title uses the zenoss device TITLE
+	aasort($ints,'title');
+	return $ints;
     }
-    fclose($handle);
-    // Sort the Array by Device TITLE, not key (key is a mix of IP or FQDN)
-    // Title uses the zenoss device TITLE
-    aasort($ints,'title');
-    return $ints;
 }
 
 function aasort (&$array, $key) {
