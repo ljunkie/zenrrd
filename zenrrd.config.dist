@@ -1,11 +1,11 @@
 #
 # renderserver_url is the location of your zenoss RenderServer
-# Example: http://<your_domain_name>:8080/zport/RenderServer/render?gopts=
+# Example: http://localhost:8080/zport/RenderServer/render?gopts=
 #   
 # You can find this url by view an interface graph (before you zoom) and copy the image URL
 #
 
-renderserver_url=http://<your_zenoss_url:8080>/zport/RenderServer/render?gopts=
+renderserver_url=http://localhost:8080/zport/RenderServer/render?gopts=
 
 
 #

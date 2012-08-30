@@ -4,6 +4,7 @@ use MIME::Base64::URLSafe;
 use Time::ParseDate;
 use LWP::UserAgent;
 use CGI;
+use Data::Dumper;
 
 my $debug = 0; ## will print text if debug is set
 my %config = &zenrrdConfig();
@@ -31,9 +32,7 @@ if ($debug) {
 
 my $q = CGI->new;
 $params = { map { $_ => ($q->param($_))[0] } $q->param };
-
-exit if !$params->{'device'};
-exit if !$params->{'int'};
+if (!$params->{'device'} ){    &exitcgi('missing  parameter device=');}
 
 ## Set some defaults
 my $start = time-86400;
@@ -42,6 +41,7 @@ my $width = 800;
 my $start_date = localtime($start);
 my $end_date = localtime($end);
 ## End
+
 
 if ($params->{'width'}){    $width = $params->{'width'};}
 if ($params->{'start'}){
@@ -60,87 +60,138 @@ if ($params->{'end'}){
 my $device = $params->{'device'};
 my $int  = $params->{'int'};
 
-my $comment =  "$start_date    through    $end_date";
+
 
 ## These can be set from parameters.. if not, we will set from csv
-my $desc = $params->{'int_desc'};
-my $title = $params->{'title'};
-if (!$title) {    $title = $ints->{$device}->{$int}[2];}
-if (!$desc) {    $desc = $ints->{$device}->{$int}[0];}
+my $int_desc = $params->{'int_desc'};
+my $dev_title = $params->{'title'};
+if (!$dev_title) {    $dev_title = $ints->{$device}->{$int}[2];}
+if (!$int_desc) {    $int_desc = $ints->{$device}->{$int}[0];}
+
+my $rrd_base = $device_dir . $device . '/';
+my $rrd_base_int = $rrd_base . 'os/interfaces/'.$int.'/';
+
+
+my $rrd_cpu = 'cpu5min_cpu5min.rrd';
+my $rrd_mem = 'mem5minFree_mem5minFree.rrd';
+my $rrd_uptime = 'sysUpTime_sysUpTime.rrd';
+
+my $rrd_in_oct = 'ifHCInOctets_ifHCInOctets.rrd';
+my $rrd_out_oct = 'ifHCOutOctets_ifHCOutOctets.rrd';
+
+my $rrd_in_pkt = 'ifHCInUcastPkts_ifHCInUcastPkts.rrd';
+my $rrd_out_pkt = 'ifHCInUcastPkts_ifHCInUcastPkts.rrd';
+
+my $rrd_in_err = 'ifInErrors_ifInErrors.rrd';
+my $rrd_out_err = 'ifOutErrors_ifOutErrors.rrd';
+
+
+
 
 ## we now parse the interfaces.csv file for 64bit or 32bit Counter.. No need for file access
 #if (-f $inHC && -f $outHC) {    $in = $inHC;    $out = $outHC; }
-# Set HC counter if 64bit interface
-my $inHC = $device_dir . $device . '/os/interfaces/'.$int .'/ifHCInOctets_ifHCInOctets.rrd';
-my $outHC = $device_dir . $device . '/os/interfaces/'.$int.'/ifHCOutOctets_ifHCOutOctets.rrd';
-my $in = $device_dir . $device . '/os/interfaces/'.$int .'/ifInOctets_ifInOctets.rrd';
-my $out = $device_dir . $device . '/os/interfaces/'.$int.'/ifOutOctets_ifOutOctets.rrd';
-if ($ints->{$device}->{$int}[3] =~ /64bit/) {
-    $in = $inHC;
-    $out = $outHC;
+my $is_64bit =0;
+if ($ints->{$device}->{$int}[3] =~ /64bit/) {    $is_64bit = 1;}
+
+
+my @options;
+
+## default is throughput and in/out oct
+my $req_int = 1;
+my $label = 'Throughput';
+my $rrd_template = 'throughput';
+
+my $rrd_in = $rrd_base_int . $rrd_in_oct;
+my $rrd_out = $rrd_base_int . $rrd_out_oct;
+
+if (defined($params->{'type'}) ) {
+    
+    ## Packets Per Second
+    ##   Template: packets
+    if ($params->{'type'} =~ /pkt/) {
+	$rrd_template = 'packets';
+	$label = 'Packets';
+	$rrd_in = $rrd_base_int . $rrd_in_pkt;
+	$rrd_out = $rrd_base_int . $rrd_out_pkt;
+    } 
+    
+    
+    ## Errors Per Second
+    ##   Template: errors
+    elsif ($params->{'type'} =~ /err/) {
+	$rrd_template = 'errors';
+	$label = 'Errors';
+	$rrd_in = $rrd_base_int . $rrd_in_err;
+	$rrd_out = $rrd_base_int . $rrd_out_err;
+    } 
+
+    ## Memroy usage for Device
+    ##   Template: memory
+    elsif ($params->{'type'} =~ /mem/) {
+	$rrd_template = 'memory';
+	$req_int = 0; # does not require interface
+	$label = 'Memory';
+	$rrd_in = $rrd_base . $rrd_mem;
+    } 
+
+    ## Memroy usage for Device
+    ##   Template: memory
+    elsif ($params->{'type'} =~ /cpu/) {
+	$rrd_template = 'cpu';
+	$req_int = 0; # does not require interface
+	$label = 'CPU';
+	$rrd_in = $rrd_base . $rrd_cpu;
+    } 
+    
 }
+
+## if counter is not 64bit, replace any ifHC with if
+if (!$is_64bit) {
+    $rrd_in =~ s/ifHC/if/gi;
+    $rrd_out =~ s/ifHC/if/gi;
+}
+
+## Load the RRD template
+@options = &LoadRRDtemplate($rrd_template,$rrd_in,$rrd_out);
+
+
+## if interface parameter is requires -- exit
+if (!$params->{'int'} && $req_int){    &exitcgi('missing  parameter int=');}
 
 my $url_end = '&drange=129600&width=' . $width . '&start=' . $start .'&end='.$end;
 
 ### COMMENT data cannot have any non escaped colons..
+my $comment =  "$start_date    through    $end_date";
+my $rrd_title = "$label :: $int";
+if ($int_desc) {    $rrd_title = "$label :: $int :: $int_desc";}
+if (!$req_int){      $rrd_title = "$label";}
+
 $comment =~ s/\\//g; ## remove escapes..
 $comment =~ s/:/\\:/g; ## add them back in
-$device =~ s/\\//g; ## remove escapes..
-$device =~ s/:/\:/g; ## add them back in
-$title =~ s/\\//g; ## remove escapes..
-$title =~ s/:/\:/g; ## add them back in
+$dev_title =~ s/\\//g; ## remove escapes..
+$dev_title =~ s/:/\:/g; ## add them back in
 
-my @options =(
-'-F',
-'-E',
-"-t $int :: $desc",
-'--disable-rrdtool-tag',
-'--height=100',
-'--lower-limit=0',
-'--rigid',
-'--vertical-label=bits/sec',
-"COMMENT: $title ". '\c',
-"COMMENT: $comment ". '\c',
-"COMMENT: ". '\c',
-'DEF:ifHCInOctets-raw='.$in.':ds0:AVERAGE',
-'DEF:ifHCInOctets-raw-max='.$in.':ds0:MAX',
-'CDEF:ifHCInOctets-rpn=ifHCInOctets-raw,8,*',
-'CDEF:ifHCInOctets-rpn-max=ifHCInOctets-raw-max,8,*',
-'CDEF:ifHCInOctets=ifHCInOctets-rpn',
-'AREA:ifHCInOctets-rpn#00cc00ff:Inbound       ',
-'GPRINT:ifHCInOctets-rpn:LAST:cur\:%5.2lf%s',
-'GPRINT:ifHCInOctets-rpn:AVERAGE:avg\:%5.2lf%s',
-'GPRINT:ifHCInOctets-rpn-max:MAX:max\:%5.2lf%s\j',
-'DEF:ifHCOutOctets-raw='.$out.':ds0:AVERAGE',
-'DEF:ifHCOutOctets-raw-max='.$out.':ds0:MAX',
-'CDEF:ifHCOutOctets-rpn=ifHCOutOctets-raw,8,*',
-'CDEF:ifHCOutOctets-rpn-max=ifHCOutOctets-raw-max,8,*',
-'CDEF:ifHCOutOctets=ifHCOutOctets-rpn',
-'LINE1:ifHCOutOctets-rpn#0000ff99:Outbound      ',
-'GPRINT:ifHCOutOctets-rpn:LAST:cur\:%5.2lf%s',
-'GPRINT:ifHCOutOctets-rpn:AVERAGE:avg\:%5.2lf%s',
-'GPRINT:ifHCOutOctets-rpn-max:MAX:max\:%5.2lf%s\j',
-'CDEF:allbits=ifHCInOctets-rpn,ifHCOutOctets-rpn,MAX',
-'VDEF:95=allbits,95,PERCENT',
-'VDEF:95th=allbits,95,PERCENT',
-'HRULE:95th#FF0000:95th',
-'GPRINT:95th:%0.2lf %Sbps\l',
-	      );
+my @def_options =(
+		  "-t $rrd_title",
+		  "COMMENT: $dev_title ". '\c',
+		  "COMMENT: $comment ". '\c',
+		  "COMMENT: ". '\c',
+		  );
+
+
+## append the default RRD options
+@options = (@def_options,@options);    
+
+
 
 my $diff = $end-$start;
 my $xgrid;
-if ($diff > 86400*15) {
-    $xgrid = '--x-grid=DAY:1:DAY:7:DAY:2:86400:%D ';
-}
-if ($diff > 86400*20) {
-    $xgrid = '--x-grid=DAY:1:DAY:7:DAY:2:86400:%m-%d ';
-}
-if ($diff > 86400*32) {
-    $xgrid = '';
-}
-if ($xgrid) {
-    push(@options,$xgrid);
-}
+if ($diff > 86400*15) {    $xgrid = '--x-grid=DAY:1:DAY:7:DAY:2:86400:%D ';}
+if ($diff > 86400*20) {    $xgrid = '--x-grid=DAY:1:DAY:7:DAY:2:86400:%m-%d ';}
+if ($diff > 86400*32) {    $xgrid = '';}
+if ($xgrid) {    push(@options,$xgrid);}
+
+## now build the zenoss URL from the RRD template
 my $gopts = urlsafe_b64encode(compress(join('|', @options), 9)) . '==';
 my $URL = $url_start . $gopts . $url_end;
 
@@ -178,6 +229,22 @@ sub LoadInts() {
     }
     close $fh;
     return $ints;
+}
+
+
+sub LoadRRDtemplate() {
+    my ($file,$in,$out) = @_;
+
+    open my $fh, '<', "../templates/$file" or &exitcgi("Could not open template '$file' = $!");
+    my @o;
+    while (my $line = <$fh>) {
+	$line =~ s/{\$rrd_file_in}/$in/g;
+	$line =~ s/{\$rrd_file_out}/$out/g;
+	chomp $line;
+	push (@o,$line);
+    }
+    close $fh;
+    return @o;
 }
 
 

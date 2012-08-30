@@ -1,0 +1,15 @@
+-F
+-E
+--disable-rrdtool-tag
+--height=100
+--vertical-label=percentage
+--upper-limit=100
+--lower-limit=0
+HRULE:90#800000:CPU\j
+DEF:cpu5min-raw={$rrd_file_in}:ds0:AVERAGE
+DEF:cpu5min-raw-max={$rrd_file_in}:ds0:MAX
+CDEF:cpu5min=cpu5min-raw
+AREA:cpu5min-raw#00cc00ff:cpu5min       
+GPRINT:cpu5min-raw:LAST:cur\:%0.2lf%s
+GPRINT:cpu5min-raw:AVERAGE:avg\:%0.2lf%s
+GPRINT:cpu5min-raw-max:MAX:max\:%0.2lf%s\j

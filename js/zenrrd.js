@@ -6,9 +6,9 @@ $(document).ready(function(){
 	localStorage.removeItem( 'dateend');
 	$('#datepicker_start, #datepicker_end').val('');
     });
-    var test = $('#int_name').val();
+    var test = $('#device_name').val();
     if (typeof test != 'undefined') {
-	if ($('#int_name').val().length > 0) {
+	if (test.length > 0) {
 	    $('#updategraph').show();
 	    $('#timeframe').show();
 	} else {

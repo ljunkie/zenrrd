@@ -16,7 +16,7 @@ function removeqsvar($url, $varname) {
     return $urlpart . '?' . $newqs;
 }
 
-function printGraph($device,$int,$dozoom =null) {
+function printGraph($device,$int,$dozoom =null,$show_url = 1,$type = null) {
     global $ints;
     
     if ($_REQUEST['zo']) {	
@@ -94,11 +94,21 @@ function printGraph($device,$int,$dozoom =null) {
 	$zoomParams .= "&width=" . urlencode($_REQUEST['width']);
     }
 
-    $cgi_query = '?device=' . $device . '&int=' . $int . $extraParams;
-    $zoom = 'zoom.php?device=' . $device . '&int=' . $int . $zoomParams;
-    $url = getHost(1) . 'cgi-bin/zenoss_rrd.cgi' . $cgi_query;
+    if ($int) {
+	$cgi_query = '?device=' . $device . '&int=' . $int . $extraParams;
+	$zoom = 'zoom.php?device=' . $device . '&int=' . $int . $zoomParams;
+	$url = getHost(1) . 'cgi-bin/zenoss_rrd.cgi' . $cgi_query;
+    } else {
+	$cgi_query = '?device=' . $device . $extraParams;
+	$zoom = 'zoom.php?device=' . $device . $zoomParams;
+	$url = getHost(1) . 'cgi-bin/zenoss_rrd.cgi' . $cgi_query;
+    }
+    
     
     if ($dozoom) {
+	if ($_REQUEST['type']) {
+	    $url .= "&type={$_REQUEST['type']}";
+	}
 	print "<table><tr>";
 	print "<td><font size=2>zoom out:";
 	
@@ -126,10 +136,24 @@ function printGraph($device,$int,$dozoom =null) {
 	print "</td>";
 	print "</tr></table>";
 	print "<p><img src='$url' id='graph'>";
-	print "<br><font size=2><a href='$url' target='_blank'>$url</a></font>";
-    } else {
+	if ($show_url) {	    print "<br><font size=2><a href='$url' target='_blank'>$url</a></font>";	}
+    } elseif($int) {
 	print "<p><a href='$zoom' target='_Blank' class='zoom_cur'><img title='Click to ZOOM' src='$url' ></a>";
-	print "<br><font size=2><a href='$url' target='_blank'>$url</a></font>";
+	if ($show_url) {	    print "<br><font size=2><a href='$url' target='_blank'>$url</a></font>";	}
+	## &type=pkts
+	$type = 'pkts';
+	print "<p><a href='$zoom&type=$type' target='_Blank' class='zoom_cur'><img title='Click to ZOOM' src='$url&type=$type' ></a>";
+	if ($show_url) {	print "<br><font size=2><a href='$url&type=$type' target='_blank'>$url&type=$type</a></font>"; }
+	$type = 'err';
+	print "<p><a href='$zoom&type=$type' target='_Blank' class='zoom_cur'><img title='Click to ZOOM' src='$url&type=$type' ></a>";
+	if ($show_url) {	print "<br><font size=2><a href='$url&type=$type' target='_blank'>$url&type=$type</a></font>"; }
+    }     else {
+	$type = 'cpu';
+	print "<p><a href='$zoom&type=$type' target='_Blank' class='zoom_cur'><img title='Click to ZOOM' src='$url&type=$type' ></a>";
+	if ($show_url) {	print "<br><font size=2><a href='$url&type=$type' target='_blank'>$url&type=$type</a></font>"; }
+	$type = 'mem';
+	print "<p><a href='$zoom&type=$type' target='_Blank' class='zoom_cur'><img title='Click to ZOOM' src='$url&type=$type' ></a>";
+	if ($show_url) {	print "<br><font size=2><a href='$url&type=$type' target='_blank'>$url&type=$type</a></font>"; }
     }
 }
 

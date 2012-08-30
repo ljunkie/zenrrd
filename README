@@ -41,7 +41,7 @@ Installing:
     # this will update your interface csv file every hour on the 30
     30 * * * * root <webroot>/bin/zenoss_rrd_int_csv.sh
 
-5) [optional] To allow graph access without the need to login to zenoss first..
+5) Allow graph access without the need to login to zenoss
     Visit: http://<your_zenoss_url>/zport/RenderServer/manage_access
      - Allow anonymouse to 'View' -- it's close to the bottom of the page
 

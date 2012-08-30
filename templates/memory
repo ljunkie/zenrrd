@@ -1,0 +1,13 @@
+-F
+-E
+--disable-rrdtool-tag
+--height=100
+--vertical-label=memory
+--base=1024
+DEF:mem5minFree-raw={$rrd_file_in}:ds0:AVERAGE
+DEF:mem5minFree-raw-max={$rrd_file_in}:ds0:MAX
+CDEF:mem5minFree=mem5minFree-raw
+AREA:mem5minFree-raw#00cc00ff:mem5minFree   
+GPRINT:mem5minFree-raw:LAST:cur\:%0.2lf%s
+GPRINT:mem5minFree-raw:AVERAGE:avg\:%0.2lf%s
+GPRINT:mem5minFree-raw-max:MAX:max\:%0.2lf%s\j

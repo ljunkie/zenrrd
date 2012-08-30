@@ -35,6 +35,7 @@ print "</td><td>";
 if ($_REQUEST['device']) {
     print "<select id='int_name' name='int' class='on_change_int'>";
     print "<option value=>---- Select an Interface -----</option>";
+    print "<option value=> ** Device Graphs</option>";
     if ($_REQUEST['int'] == 'ALLGRAPHS') { $sel = 'SELECTED'; } ELSE { $sel = '';}
     print "<option $sel value=ALLGRAPHS> *** All Interface Graphs </option>";
     print "<option value=></option>";
@@ -80,6 +81,12 @@ print "</tr></table>";
 print '</form>';
 print "</div>";
 
+if ($_REQUEST['device'] && (!$_REQUEST['int'] && !$_REQUEST['ALL'])) {
+    $device = $_REQUEST['device'];
+    // Print Device Graphs
+    printGraph($device,null,null,0);
+ }
+
 if ($_REQUEST['device'] && ($_REQUEST['int'] || $_REQUEST['ALL'])) {
     $device = $_REQUEST['device'];
     $int_name = $_REQUEST['int'];
@@ -87,11 +94,14 @@ if ($_REQUEST['device'] && ($_REQUEST['int'] || $_REQUEST['ALL'])) {
     	foreach ($ints[$device] as $int_name => $int_arr) {
 	    $int_oper = $int_arr['operStatus'];
 	    if ($int_oper == 1) {
-		printGraph($device,$int_name);
+		print "<hr>";
+		print "{$ints[$device]['title']} :: {$int_name} :: {$int_arr['desc']}<br>";
+		printGraph($device,$int_name,null,0);
+
 	    }
     	}
     } else {
-	printGraph($device,$int_name);
+	printGraph($device,$int_name,null,0);
     }
  }
 ?>
