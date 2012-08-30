@@ -56,13 +56,17 @@ if ($params->{'end'}){
     $end_date = localtime($end);
 }
 
+## These are required to create the graph
 my $device = $params->{'device'};
 my $int  = $params->{'int'};
 
 my $comment =  "$start_date    through    $end_date";
 
+## These can be set from parameters.. if not, we will set from csv
 my $desc = $params->{'int_desc'};
 my $title = $params->{'title'};
+if (!$title) {    $title = $ints->{$device}->{$int}[2];}
+if (!$desc) {    $desc = $ints->{$device}->{$int}[0];}
 
 ## we now parse the interfaces.csv file for 64bit or 32bit Counter.. No need for file access
 #if (-f $inHC && -f $outHC) {    $in = $inHC;    $out = $outHC; }
