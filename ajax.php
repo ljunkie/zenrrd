@@ -1,5 +1,7 @@
 <?
     require_once('functions.php');    
+    require_once('inc/jsonwrapper.php');    
+
 $ints = LoadInts();
 
 foreach ($ints as $dev_name => $dev_arr) {
