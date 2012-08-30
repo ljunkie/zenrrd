@@ -1,5 +1,6 @@
 #!/bin/bash
-source ../zenrrd.config
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source  ${DIR%/*}/zenrrd.config
 # $zenoss_user is pulled from config
 
 debug=0
