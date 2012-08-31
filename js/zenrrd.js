@@ -50,7 +50,6 @@ $(document).ready(function(){
 	onSelect: function (selectedDateTime){
             var start = $(this).datetimepicker('getDate');
             $('#datepicket_end').datetimepicker('option', 'minDate', new Date(start.getTime()));
-	    localStorage.setItem( 'datestart', dateText );
 	}
     }).datepicker('setDate', localStorage.getItem( 'datestart'));
 
