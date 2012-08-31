@@ -1,6 +1,6 @@
 ###Custom graph front-end for ZENOSS - Cacti Like Graphs including date ranges and zoom
 
-DEMO @ http://zendrrd.linuxjunkie.com
+DEMO @ http://zenrrd.linuxjunkie.com
 
 #### Initial Graph
 ##### Device: testrouter.title   Interface: TenGigabitEthernet1/4   Desc: Interface Description Test
