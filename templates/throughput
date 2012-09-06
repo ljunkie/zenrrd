@@ -4,7 +4,7 @@
 --height=100
 --lower-limit=0
 --rigid
---vertical-label=errors/sec
+--vertical-label=bits/sec
 DEF:ifHCInOctets-raw={$rrd_file_in}:ds0:AVERAGE
 DEF:ifHCInOctets-raw-max={$rrd_file_in}:ds0:MAX
 CDEF:ifHCInOctets-rpn=ifHCInOctets-raw,8,*
