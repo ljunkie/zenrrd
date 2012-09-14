@@ -35,6 +35,7 @@ $params = { map { $_ => ($q->param($_))[0] } $q->param };
 if (!$params->{'device'} ){    &exitcgi('missing  parameter device=');}
 
 ## Set some defaults
+# $start,$end will alway be epoch format
 my $start = time-86400;
 my $end = time;
 my $width = 800;
@@ -54,6 +55,12 @@ if ($params->{'end'}){
     $end = $params->{'end'};
     if ($params->{'end'} =~ /[-\/]+/) {	$end = &parsedate($end);    }    
     $end_date = localtime($end);
+}
+
+## if start > end - start 1 day prior
+if ($start > $end) {
+    $start = $end-86400; 
+    $start_date = localtime($start);
 }
 
 ## These are required to create the graph

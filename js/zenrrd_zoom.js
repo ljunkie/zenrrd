@@ -43,21 +43,6 @@ function zoomit(e) {
     window.location = new_img_url;
 };
 
-function parseQuery ( query ) {
-    var Params = new Object ();
-    if ( ! query ) return Params; // return empty object
-    var Pairs = query.split(/[;&]/);
-    for ( var i = 0; i < Pairs.length; i++ ) {
-	var KeyVal = Pairs[i].split('=');
-	if ( ! KeyVal || KeyVal.length != 2 ) continue;
-	var key = unescape( KeyVal[0] );
-	key = key.replace(/\?/g, '');
-	var val = unescape( KeyVal[1] );
-	val = val.replace(/\+/g, ' ');
-	Params[key] = val;
-    }
-    return Params;
-}
 
 function displayCoords(e){
     $('#x1').val(e.x);
@@ -281,9 +266,10 @@ function displayCoords(e){
 	var graph_w= boundx-82;
 	var graph_h=100; // maybe not right.. but height of actual graph seems to always be 100px
 	
-	var $trk = newTracker().width(graph_w+5).height(graph_h+5).css({
+	//var $trk = newTracker().width(graph_w+5).height(graph_h+5).css({
+	var $trk = newTracker().width(graph_w+5).height(boundy).css({
 	    position: 'absolute',
-	    top: '30px',
+	    top: '0px',
 	    left: '65px',
 	    zIndex: 290
 	}).mousedown(newSelection);
