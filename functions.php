@@ -1,13 +1,37 @@
 <?
-    $filename = 'zenrrd.config';
-
-if (!file_exists($filename)) {
-    echo "The file <b>$filename</b> does not exist</b>";
+$config_filename = 'zenrrd.config';
+if (!file_exists($config_filename)) {
+    echo "The file <b>$config_filename</b> does not exist</b>";
     $file = file_get_contents('README');
     print "<p>Please read the file README<p>";
     print "<pre>$file</pre>";
     exit;
+ } else {
+  foreach (file($config_filename) as $line_num => $line) {
+    if ( ! preg_match("/#.*/", $line) && preg_match("/\S/", $line)) {
+      list( $key, $value ) = explode( "=", trim( $line ), 2);
+      define(strtolower($key), $value);
+      define(strtoupper($key), $value);
+    }
+  }
+  $req = array("renderserver_url", "zenoss_perf_dir", "zenoss_user" );
+  $config_error=0;
+  foreach ($req as $val) {
+    if (!defined($val)) {
+      $missing .=  "missing: <b>$val=</b><br>";
+      $config_error=1;
+    }
+  }
+  if (!empty($config_error)) {
+    echo "<p>The file <b>$config_filename</b> contains errors.</b><p>$missing<p>";
+    print "<hr>-----------------------------contents----------------------------<br>";
+    $file = file_get_contents($config_filename);
+    print "<p><p>";
+    print "<pre>$file</pre>";
+    exit;
+  }
  }
+
 function removeqsvar($url, $varname) {
     list($urlpart, $qspart) = array_pad(explode('?', $url), 2, '');
     parse_str($qspart, $qsvars);
@@ -50,32 +74,47 @@ function printGraph($device,$int,$dozoom =null,$show_url = 1,$type = null) {
 	exit;
     }
     
+    
     if (!empty($_REQUEST['end'])) {
-	$extraParams .="&end={$_REQUEST['end']}";   
-	if ($dozoom) {
-	    $zoomParams .='&end=' . $_REQUEST['end'];
-	} else {
-	    $zoomParams .='&end=' . strtotime($_REQUEST['end']);
-	}
+      
+      $extraParams .="&end={$_REQUEST['end']}";   
+      if ($dozoom) {
+	$zoomParams .='&end=' . $_REQUEST['end'];
+      } else {
+	$zoomParams .='&end=' . strtotime($_REQUEST['end']);
+      }
     } else {
-	// no date set - default to NOW
+      
+
+      // no date set - default to NOW
+      if (defined('DEMO')) {
+	// set default date
+	$zoomParams .='&end=' . DEMO;
+	$extraParams .='&end=' . DEMO;
+      } else {
 	$zoomParams .='&end=' . time();
 	$extraParams .='&end=' . time();
+      }
+	
     }
     
     // start date
     if (!empty($_REQUEST['start'])) {
-	$extraParams .="&start={$_REQUEST['start']}";    
-	if ($dozoom) {
-	    $zoomParams .='&start=' . $_REQUEST['start'];
+      
+      $extraParams .="&start={$_REQUEST['start']}";    
+      if ($dozoom) {
+	$zoomParams .='&start=' . $_REQUEST['start'];
 	} else {
 	    $zoomParams .='&start=' . strtotime($_REQUEST['start']);
 	}
     } else {
-	// no date set - default to one day of graphs
-	$start = time()-86400;
-	$extraParams .='&start=' . $start;
-	$zoomParams .='&start=' . $start;
+      // no date set - default to one day of graphs
+      $start = time()-86400;
+      if (defined('DEMO')) {
+	$start = DEMO-86400; //demo mode.. fixed date
+      }
+      $extraParams .='&start=' . $start;
+      $zoomParams .='&start=' . $start;
     }
     
     // If the interface description is not the same as the interface.. we will include it for display
@@ -204,5 +243,6 @@ function getHost($with_base){
 	return $protocol . "://" . $_SERVER['HTTP_HOST'];
     }
 }
+
 
 ?>
