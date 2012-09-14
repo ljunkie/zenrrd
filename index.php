@@ -15,7 +15,7 @@
     
     
 
-    if (DEMO == 1) {
+    if (defined('DEMO')) {
       print "<div style='padding: 10px;margin: 10px;border:dotted 1px; width:800px; font-weight: normal; color: #333333'><font color=red>Demo Mode: </font> Any end date past 2012-08-30 will not have any graph data. <br><strong>Device Names</strong> are not real<br><strong>Interfaces</strong> Description (alias) been set to '{InterfaceID} desc' - Normally they would be more useful</div>";
     }
 
