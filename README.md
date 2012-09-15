@@ -69,7 +69,7 @@ DEMO @ http://zenrrd.linuxjunkie.com
  ...and explorer
 
  
-##Installing: 
+##Modifying
 
 - Feel fee to modify/update anything. If you have time to fix and add features, let me know!
 
