@@ -69,3 +69,8 @@ DEMO @ http://zenrrd.linuxjunkie.com
  ...and explorer
 
  
+##Installing: 
+
+- Feel fee to modify/update anything. If you have time to fix and add features, let me know!
+
+- If you edit the zenrrd.js or zenrrd_zoom.js, make sure you run bin/compile_js.sh to update the minfified code or you won't see your updates. You can also of course change the includes to point at the non *.min.js files for testing.
